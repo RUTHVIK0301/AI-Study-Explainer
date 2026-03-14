@@ -1,175 +1,221 @@
-AI Study Topic Explainer
+# 🚀 AI Study Topic Explainer
 
-A small web app where you type a topic and get a simple, student-friendly explanation back.
+A lightweight AI-powered web application that helps students quickly
+understand study topics with clear and simple explanations.
 
-## Project Description
+Just type a topic like **"Binary Search", "Photosynthesis", or "Neural
+Networks"**, and the app generates an easy-to-understand explanation
+suitable for quick revision.
 
-This is basically a “study helper”: enter something like “Photosynthesis” or “Binary Search” and the app generates a short explanation that’s easy to revise from.
+------------------------------------------------------------------------
 
-The important part is that the AI call happens on the server (not in the browser), so your API key stays private.
+# 📖 Overview
 
-## How The AI API Was Used
+Studying complex subjects can sometimes be confusing. This project
+solves that by providing **short, student-friendly explanations** using
+AI.
 
-The app uses Google Gemini through the `@google/generative-ai` SDK.
+The application sends the topic to a secure server endpoint which
+communicates with **Google Gemini AI** to generate the explanation.
 
-How it works:
+🔐 The API key is kept **server-side**, ensuring it is never exposed in
+the browser.
 
-- The UI sends your topic to a server endpoint: `POST /api/explain`
-- That endpoint lives in `src/app/api/explain/route.ts`
-- The endpoint calls a server-only helper in `src/lib/aiClient.ts` (it imports `server-only`)
-- The helper builds a prompt (keep it short, avoid jargon, add an example if it helps) and calls Gemini
-- The model can be changed with `GEMINI_MODEL` (default: `gemini-flash-latest`)
+------------------------------------------------------------------------
 
-If Gemini fails (invalid key, quota, wrong model name, etc.), the API returns a friendly error message and an appropriate HTTP status code so the UI can show a useful message.
+# ⚙️ How the System Works
 
-## Features
+1.  User enters a topic in the UI\
+2.  Frontend sends request to `POST /api/explain`\
+3.  Server API receives the request\
+4.  AI helper builds a prompt\
+5.  Google Gemini generates the explanation\
+6.  Response is returned to the UI
 
-- Type a topic and submit
-- Loading state + clear error messages
-- Explanation output keeps paragraphs/line breaks
-- API key stays server-side
+All AI logic runs on the **backend**, keeping the API key safe.
 
-## Tech Stack
+------------------------------------------------------------------------
 
-- Next.js (App Router) + TypeScript
-- Tailwind CSS
-- Gemini via `@google/generative-ai`
+# ✨ Features
 
-## Prerequisites
+-   AI-powered topic explanations
+-   Student-friendly summaries
+-   Secure server-side API usage
+-   Loading states and error handling
+-   Clean UI with formatted explanations
 
-- Node.js 20+ (recommended: latest LTS)
-- A Gemini API key from Google AI Studio
+------------------------------------------------------------------------
 
-To confirm Node is installed:
+# 🧰 Tech Stack
 
-```bash
+-   **Next.js (App Router)**
+-   **TypeScript**
+-   **Tailwind CSS**
+-   **Google Gemini AI**
+-   **@google/generative-ai SDK**
+
+------------------------------------------------------------------------
+
+# 📦 Requirements
+
+Make sure the following are installed:
+
+-   Node.js 20+
+-   Gemini API Key
+
+Check versions:
+
+``` bash
 node -v
 npm -v
 ```
 
-## Getting Started
+------------------------------------------------------------------------
 
-### 1) Install dependencies
+# 🚀 Setup Instructions
 
-From the `ai-study-explainer/` folder:
+## 1. Install Dependencies
 
-```bash
+``` bash
 npm install
 ```
 
-### 2) Configure environment variables
+## 2. Create Environment File
 
-Create a `.env.local` file in `ai-study-explainer/`:
+Create `.env.local` in the root folder.
 
-```bash
+``` env
 GOOGLE_API_KEY=your_gemini_api_key
 GEMINI_MODEL=gemini-flash-latest
 ```
 
-Notes:
+Important:
 
-- Don’t paste your `GOOGLE_API_KEY` into client-side code or commit it to Git.
-- After editing `.env.local`, restart the dev server.
-- `GEMINI_MODEL` is optional. You can set either `gemini-flash-latest` or `models/gemini-flash-latest`.
+-   Do not commit `.env.local` to GitHub
+-   Restart the server after editing environment variables
 
-### 3) Run the development server
+------------------------------------------------------------------------
 
-```bash
+## 3. Start Development Server
+
+``` bash
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser.
+Open in browser:
 
-## Project Structure
+http://localhost:3000
 
-- UI page: `src/app/page.tsx`
-- API route: `src/app/api/explain/route.ts`
-- Gemini client (server-only): `src/lib/aiClient.ts`
-- UI components: `src/components/*`
+------------------------------------------------------------------------
 
-## API
+# 📂 Project Structure
 
-### `POST /api/explain`
+    src/
+     ├── app/
+     │   ├── api/explain/route.ts
+     │   └── page.tsx
+     ├── components/
+     └── lib/
+         └── aiClient.ts
 
-Request body:
+------------------------------------------------------------------------
 
-```json
-{ "topic": "Photosynthesis" }
+# 🔌 API
+
+### POST /api/explain
+
+Request:
+
+``` json
+{
+  "topic": "Photosynthesis"
+}
 ```
 
 Response:
 
-```json
-{ "ok": true, "explanation": "..." }
+``` json
+{
+  "ok": true,
+  "explanation": "..."
+}
 ```
 
-Errors:
+Error:
 
-```json
-{ "ok": false, "error": { "message": "...", "code": "..." } }
+``` json
+{
+  "ok": false,
+  "error": {
+    "message": "...",
+    "code": "..."
+  }
+}
 ```
 
-Common status codes:
+------------------------------------------------------------------------
 
-- `400` empty topic / invalid input
-- `401` invalid/rejected API key
-- `429` quota/rate-limit exceeded
-- `503` model not found / upstream unavailable
+# 🛠 Troubleshooting
 
-## Useful Scripts
+## API Key Rejected
 
-- `npm test` runs UI tests (Vitest)
-- `npm run lint` runs ESLint
-- `npm run build` builds for production
-- `npm run list-models` lists available Gemini models for your API key
+-   Verify `GOOGLE_API_KEY` in `.env.local`
+-   Restart `npm run dev`
+-   Generate a new key if necessary
 
-## Troubleshooting
+------------------------------------------------------------------------
 
-### “Gemini API key was rejected”
+## Model Not Found
 
-- Check `GOOGLE_API_KEY` in `.env.local`.
-- Restart `npm run dev` after editing `.env.local`.
-- If it still fails, create a new key in Google AI Studio and replace it.
+Run:
 
-### “Gemini model was not found”
-
-- Your key might not have access to the model name you set.
-- Run:
-
-```bash
+``` bash
 npm run list-models
 ```
 
-- Copy one model (example: `models/gemini-2.0-flash`) and set:
+Then update:
 
-```bash
-GEMINI_MODEL=gemini-2.0-flash
+    GEMINI_MODEL=gemini-2.0-flash
+
+Restart the server.
+
+------------------------------------------------------------------------
+
+## Rate Limit
+
+If quota exceeded:
+
+-   Wait 30--60 seconds
+-   Try again
+
+------------------------------------------------------------------------
+
+# ☁️ Deployment
+
+Deploy using **Vercel**
+
+1.  Push repo to GitHub
+2.  Import project into Vercel
+3.  Add environment variables
+
+```{=html}
+<!-- -->
 ```
+    GOOGLE_API_KEY
+    GEMINI_MODEL
 
-- Restart the dev server.
+4.  Deploy
 
-### “Quota exceeded / rate limit”
+------------------------------------------------------------------------
 
-- Wait 30–60 seconds and retry.
-- Reduce how often you click Explain.
+# 🔐 Security
 
-## Deploy (Vercel)
+-   Never expose API keys in frontend code
+-   Store keys in `.env.local`
+-   Use server-side API routes only
 
-1) Push the repo to GitHub.
-2) Import the project into Vercel.
-3) Set Environment Variables in Vercel:
+------------------------------------------------------------------------
 
-- `GOOGLE_API_KEY`
-- (optional) `GEMINI_MODEL`
+# ⭐ AI Study Topic Explainer
 
-4) Deploy.
-
-## Security
-
-- Never put `GOOGLE_API_KEY` in client-side code.
-- Only store it in `.env.local` (local dev) and in your deployment provider’s env vars.
-
-## Notes
-
-- If `npm run build` prints a warning about the deprecated `middleware` convention, it’s safe to ignore for this project.
-"# AI-Study-Topic-Explainer" 
+A simple AI-powered tool that helps students understand topics faster.
