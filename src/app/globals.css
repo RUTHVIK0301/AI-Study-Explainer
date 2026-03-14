@@ -1,0 +1,34 @@
+@import "tailwindcss";
+
+:root {
+  --background: #faf9f6; /* Off-white Beige */
+  --foreground: #1e3a8a; /* Blue-900 */
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-beige-dark: #f5f5dc;
+  --color-blue-deep: #1e3a8a;
+  --color-blue-light: #dbeafe; /* Blue-100 */
+  --color-blue-accent: #3b82f6; /* Blue-500 */
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: Arial, Helvetica, sans-serif;
+  overflow-x: hidden;
+}
+
+/* Custom styles */
+.glass-beige {
+  background: rgba(245, 245, 220, 0.4);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(30, 58, 138, 0.1);
+}
+.glass-blue {
+  background: rgba(30, 58, 138, 0.03);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(30, 58, 138, 0.1);
+}
